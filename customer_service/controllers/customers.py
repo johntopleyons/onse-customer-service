@@ -12,9 +12,6 @@ customers = Blueprint('customers', __name__, url_prefix='/customers/')
 CREATE_PAYLOAD_SCHEMA = Schema({"firstName": And(str, len),
                                 "surname": And(str, len)})
 
-UPDATE_PAYLOAD_SCHEMA = Schema({"firstName": And(str, len),
-                                "surname": And(str, len)})
-
 
 @customers.route('/<string:customer_id>', methods=['GET'])
 def get_customer(customer_id):
@@ -60,8 +57,6 @@ def update_customer(customer_id):
         raise ContentTypeError()
 
     body = request.get_json()
-
-    UPDATE_PAYLOAD_SCHEMA.validate(body)
 
     customer = Customer(first_name=body['firstName'],
                         surname=body['surname'])
