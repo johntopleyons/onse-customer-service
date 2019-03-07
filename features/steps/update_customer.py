@@ -1,7 +1,8 @@
-from behave import when, then, given
+from behave import when
 
 
-@when('I update the surname of customer with ID "{customer_id:d}" to "{new_surname}"')
+@when('I update the surname of customer with ID "{customer_id:d}" to'
+      ' "{new_surname}"')
 def update_customer(context, customer_id, new_surname):
     context.response = context.web_client.get(f'/customers/{customer_id}')
     body = context.response.get_json()

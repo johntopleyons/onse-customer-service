@@ -91,7 +91,8 @@ def test_create_customer_with_bad_context_type(web_client):
 
 
 @patch('customer_service.model.commands.update_customer')
-def test_update_customer_updates_customer(update_customer, web_client, customer_repository):
+def test_update_customer_updates_customer(update_customer, web_client,
+                                          customer_repository):
     request_body = dict(firstName='Joe', surname='Smith')
 
     response = web_client.put('/customers/12345', json=request_body)
