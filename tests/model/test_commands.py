@@ -31,3 +31,17 @@ def test_create_customer(customer_repository):
 
     assert stored_customer.first_name == 'Nicole'
     assert stored_customer.surname == 'Forsgren'
+
+
+def test_update_customer(customer_repository):
+    customer = Customer(first_name='Gene', surname='Kim')
+    customer_repository.store(customer)
+
+    commands.update_customer(customer_id=customer.customer_id,
+                             customer_repository=customer_repository,
+                             first_name='Gene', surname='Wilder')
+
+    stored_customer = customer_repository.fetch_by_id(customer.customer_id)
+
+    assert stored_customer.first_name == 'Gene'
+    assert stored_customer.surname == 'Wilder'

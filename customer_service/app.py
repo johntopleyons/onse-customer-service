@@ -16,3 +16,6 @@ def create(customer_repository):
     app.register_blueprint(setup_swagger(), url_prefix=SWAGGER_URL)
 
     return app
+
+
+

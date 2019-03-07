@@ -73,7 +73,36 @@ def test_create_customer_with_bad_payload(web_client, bad_payload):
     assert response.status_code == 400
 
 
+@pytest.mark.parametrize(
+    'bad_payload',
+    [dict(),
+     dict(firstName='Joe', surname='Bloggs', unknown='value'),
+     dict(firstName='', surname='Bloggs'),
+     dict(firstName='Joe', surname='')])
+def test_update_customer_with_bad_payload(web_client, bad_payload):
+    response = web_client.put('/customers/12345', json=bad_payload)
+    assert response.status_code == 400
+
+
 def test_create_customer_with_bad_context_type(web_client):
     response = web_client.post('/customers/', data='not json')
     assert response.status_code == 415
     assert response.get_json()['message'] == 'Request must be application/json'
+
+
+@patch('customer_service.model.commands.update_customer')
+def test_update_customer_updates_customer(update_customer, web_client, customer_repository):
+    request_body = dict(firstName='Joe', surname='Smith')
+
+    response = web_client.put('/customers/12345', json=request_body)
+
+    assert response.is_json
+    assert response.status_code == 200
+
+    update_customer.assert_called_with(
+        customer_id=12345,
+        customer_repository=customer_repository,
+        first_name='Joe',
+        surname='Smith')
+
+    assert response.get_json()['surname'] == "Smith"
